@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity ^0.8.9;
 
 contract Todo {
     string[] public status;
-    // mapping(string => bool) public status_exist;
+    mapping(string => bool) public status_exist;
 
-    struct Task {
+    struct Task { 
       string title;
       string author;
+    //   address author;
       uint status;
       uint id;
       bool added;
@@ -19,6 +19,8 @@ contract Todo {
 
    Task task;
 
+   Task[] public state_tasks;
+
 //    mapping (bytes32 => uint) taskStatus;
 //    taskStatus[sha3(Task.title)];
 
@@ -28,18 +30,22 @@ contract Todo {
 
     function addStatus(string memory value) public {
         status.push(value);
-        // status_exist[value] = true;
+        status_exist[value] = true;
     }
 
     function getStatus() public view returns (string[] memory) {
         return status;
     }
 
-    function createTask(string memory title,
-        string memory author,
-        uint id) public {
-
-            task = Task(title, author, 0, id, false, true);
+    function createTask(string memory title, string memory author, uint id) public {
+            
+            // task = Task(title, author, 0, id, false, true);
+            task.title = title;
+            task.author = author;
+            task.status = 0;
+            task.id = id;
+            task.added = false;
+            task.created = true;
             tasks.push(task);
             tasks[id].added = true;
     }
@@ -48,13 +54,20 @@ contract Todo {
         return tasks;
     }
 
+    function getTasksAtState(uint256 status_id) public returns (Task[] memory) {
+        
+        uint256 taskArrayLen = tasks.length;
+        for (uint i=0; i<taskArrayLen; i++) {
+            if (tasks[i].status == status_id) {
+                state_tasks.push(tasks[i]);
+            }
+            
+        }
+        return state_tasks;
+    }
+
     function changeTaskStatus(uint256 task_id, uint256 status_id) public {
-        // if (tasks[task_id].added == false) {
-        //     revert("No Task found!");
-        // }
-        // if (status_exist[status[status_id]] == false) {
-        //     revert("No status found!");
-        // }
+      
         tasks[task_id].status = status_id;
     }
 
