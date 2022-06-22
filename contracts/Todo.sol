@@ -54,6 +54,10 @@ contract Todo {
         return tasks;
     }
 
+    function getAllTasksLength() public view returns (uint256 length) {
+        return tasks.length;
+    }
+
     function getTasksAtState(uint256 status_id) public returns (Task[] memory) {
         
         uint256 taskArrayLen = tasks.length;
@@ -82,6 +86,24 @@ contract Todo {
     function getTask(uint task_id) public view returns (Task memory) {
         // return status[tasks[task_id].status];
         return tasks[task_id];
+    }
+
+    function removeTask(uint index) public {
+        require(index <= tasks.length, "Task Not found");
+
+        for (uint i = index; i<tasks.length-1; i++){
+            tasks[i] = tasks[i+1];
+        }
+        tasks.pop();
+    }
+
+    function removeStatus(uint index) public {
+        require(index <= status.length, "Status Not found");
+
+        for (uint i = index; i<status.length-1; i++){
+            status[i] = status[i+1];
+        }
+        status.pop();
     }
 
 }

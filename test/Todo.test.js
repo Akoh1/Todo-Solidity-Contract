@@ -34,6 +34,16 @@ describe('Todo', () => {
     assert.ok(todo.options.address);
   });
 
+  it('status exist when loaded', async () => {
+    // await todo.methods.addStatus('in progress').send({
+    //   from: accounts[2],
+    //   gas: '3000000'
+    // });
+    const status = await todo.methods.getStatus().call();
+    console.log("Statuses: " + status);
+    assert.equal('draft', status[0]);
+  });
+
   it('can add a status', async () => {
     await todo.methods.addStatus('in progress').send({
       from: accounts[2],
@@ -102,5 +112,65 @@ describe('Todo', () => {
     });
     const task = await todo.methods.getTask(0).call();
     assert.equal('Akoh1', task.author);
+  });
+
+  it('can remove a task', async () => {
+    // await todo.methods.addStatus('in progress').send({
+    //   from: accounts[2],
+    //   gas: '3000000'
+    // });
+    await todo.methods.createTask('Task', 'Akoh', 0).send({
+      from: accounts[3],
+      gas: '3000000'
+    });
+    await todo.methods.createTask('Task1', 'Akoh1', 1).send({
+      from: accounts[4],
+      gas: '3000000'
+    });
+    await todo.methods.removeTask(1).send({
+      from: accounts[5],
+      gas: '3000000'
+    });
+    // const tasks = await todo.methods.tasks().call();
+    const len = await todo.methods.getAllTasksLength().call();
+    
+    assert.equal(1, len);
+  });
+
+  it('task id not present to remove', async () => {
+    await todo.methods.createTask('Task', 'Akoh', 0).send({
+      from: accounts[3],
+      gas: '3000000'
+    });
+    await todo.methods.createTask('Task1', 'Akoh1', 0).send({
+      from: accounts[4],
+      gas: '3000000'
+    });
+    try {
+      await todo.methods.removeTask(2).send({
+        from: accounts[5],
+        gas: '3000000'
+      });
+      assert(false);
+    } catch (e) {
+      assert(e);
+    }
+
+  });
+
+  it('can remove a status', async () => {
+    await todo.methods.addStatus('in progress').send({
+      from: accounts[2],
+      gas: '3000000'
+    });
+  
+    await todo.methods.removeStatus(1).send({
+      from: accounts[3],
+      gas: '3000000'
+    });
+    // const tasks = await todo.methods.tasks().call();
+    const len = await todo.methods.getStatus().call();
+    
+    assert.equal(1, len.length);
   });
 });
