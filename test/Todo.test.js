@@ -5,10 +5,12 @@
 
 // const { abi, evm } = require('../compile');
 import assert from 'assert';
-import ganache from 'ganache-cli';
+import Ganache from 'ganache';
+// import ganache from 'ganache-cli';
+// const ganache = require('ganache-cli');
 import Web3 from 'web3';
 import { abi, evm} from '../compile.js';
-const web3 = new Web3(ganache.provider());
+const web3 = new Web3(Ganache.provider());
 
 
 let accounts;
@@ -20,8 +22,8 @@ beforeEach(async () => {
   // Get a list of all accounts
   accounts = await web3.eth.getAccounts();
   // console.log("accounts: "+accounts);
-  // balance = await web3.eth.getBalance(accounts[3]);
-  // console.log("Balance: " + balance);
+  // // balance = await web3.eth.getBalance(accounts[3]);
+  // console.log("test abi: " + abi);
   todo = await new web3.eth.Contract(JSON.parse(abi))
     .deploy({
       data: evm,
@@ -63,7 +65,7 @@ describe('Todo', () => {
     //   from: accounts[2],
     //   gas: '3000000'
     // });
-    await todo.methods.createTask('Task', 'Akoh', 0).send({
+    await todo.methods.createTask('Task', 'Akoh').send({
       from: accounts[3],
       gas: '3000000'
     });
@@ -80,7 +82,7 @@ describe('Todo', () => {
       from: accounts[2],
       gas: '3000000'
     });
-    await todo.methods.createTask('Task', 'Akoh', 0).send({
+    await todo.methods.createTask('Task', 'Akoh').send({
       from: accounts[3],
       gas: '3000000'
     });
@@ -101,7 +103,7 @@ describe('Todo', () => {
     //   from: accounts[2],
     //   gas: '3000000'
     // });
-    await todo.methods.createTask('Task', 'Akoh', 0).send({
+    await todo.methods.createTask('Task', 'Akoh').send({
       from: accounts[3],
       gas: '3000000'
     });
@@ -118,7 +120,7 @@ describe('Todo', () => {
     //   from: accounts[2],
     //   gas: '3000000'
     // });
-    await todo.methods.createTask('Task', 'Akoh', 0).send({
+    await todo.methods.createTask('Task', 'Akoh').send({
       from: accounts[3],
       gas: '3000000'
     });
@@ -135,11 +137,11 @@ describe('Todo', () => {
     //   from: accounts[2],
     //   gas: '3000000'
     // });
-    await todo.methods.createTask('Task', 'Akoh', 0).send({
+    await todo.methods.createTask('Task', 'Akoh').send({
       from: accounts[3],
       gas: '3000000'
     });
-    await todo.methods.createTask('Task1', 'Akoh1', 1).send({
+    await todo.methods.createTask('Task1', 'Akoh1').send({
       from: accounts[4],
       gas: '3000000'
     });
@@ -153,12 +155,37 @@ describe('Todo', () => {
     assert.equal(1, len);
   });
 
-  it('task id not present to remove', async () => {
-    await todo.methods.createTask('Task', 'Akoh', 0).send({
+  it('check task id is consistent after remove', async () => {
+
+    await todo.methods.createTask('Task', 'Akoh').send({
       from: accounts[3],
       gas: '3000000'
     });
-    await todo.methods.createTask('Task1', 'Akoh1', 0).send({
+    await todo.methods.createTask('Task1', 'Akoh1').send({
+      from: accounts[4],
+      gas: '3000000'
+    });
+    await todo.methods.createTask('Task2', 'Akoh2').send({
+      from: accounts[4],
+      gas: '3000000'
+    });
+    await todo.methods.removeTask(1).send({
+      from: accounts[5],
+      gas: '3000000'
+    });
+    // const tasks = await todo.methods.tasks().call();
+    const task = await todo.methods.getTask(1).call();
+ 
+    assert.equal('Task2', task.title);
+    assert.equal(1, task.id)
+  });
+
+  it('task id not present to remove', async () => {
+    await todo.methods.createTask('Task', 'Akoh').send({
+      from: accounts[3],
+      gas: '3000000'
+    });
+    await todo.methods.createTask('Task1', 'Akoh1').send({
       from: accounts[4],
       gas: '3000000'
     });

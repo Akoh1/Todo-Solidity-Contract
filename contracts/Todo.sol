@@ -37,12 +37,13 @@ contract Todo {
         return status;
     }
 
-    function createTask(string memory title, string memory author, uint id) public {
+    function createTask(string memory title, string memory author) public {
             
             // task = Task(title, author, 0, id, false, true);
             task.title = title;
             task.author = author;
             task.status = 0;
+            uint id = this.getAllTasksLength();
             task.id = id;
             task.added = false;
             task.created = true;
@@ -93,7 +94,7 @@ contract Todo {
 
         for (uint i = index; i<tasks.length-1; i++){
             tasks[i] = tasks[i+1];
-            tasks[i].id = i+1;
+            tasks[i].id = i;
         }
         tasks.pop();
     }
