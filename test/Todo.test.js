@@ -27,6 +27,10 @@ beforeEach(async () => {
       data: evm,
     })
     .send({ from: accounts[1], gas: '3000000' });
+    await todo.methods.addStatus('Draft').send({
+      from: accounts[2],
+      gas: '3000000'
+    });
 });
 
 describe('Todo', () => {
@@ -34,27 +38,31 @@ describe('Todo', () => {
     assert.ok(todo.options.address);
   });
 
-  it('status exist when loaded', async () => {
-    // await todo.methods.addStatus('in progress').send({
-    //   from: accounts[2],
-    //   gas: '3000000'
-    // });
-    const status = await todo.methods.getStatus().call();
-    console.log("Statuses: " + status);
-    assert.equal('draft', status[0]);
-  });
+  // it('status exist when loaded', async () => {
+  //   // await todo.methods.addStatus('in progress').send({
+  //   //   from: accounts[2],
+  //   //   gas: '3000000'
+  //   // });
+  //   const status = await todo.methods.getStatus().call();
+  //   console.log("Statuses: " + status);
+  //   assert.equal('draft', status[0]);
+  // });
 
   it('can add a status', async () => {
-    await todo.methods.addStatus('in progress').send({
+    await todo.methods.addStatus('Pending').send({
       from: accounts[2],
       gas: '3000000'
     });
     const status = await todo.methods.getStatus().call();
     console.log("Statuses: " + status);
-    assert.equal('in progress', status[1]);
+    assert.equal('Pending', status[1]);
   });
 
   it('can create a task', async () => {
+    // await todo.methods.addStatus('Draft').send({
+    //   from: accounts[2],
+    //   gas: '3000000'
+    // });
     await todo.methods.createTask('Task', 'Akoh', 0).send({
       from: accounts[3],
       gas: '3000000'
@@ -64,6 +72,10 @@ describe('Todo', () => {
   });
 
   it('can change a task status', async () => {
+    // await todo.methods.addStatus('Draft').send({
+    //   from: accounts[2],
+    //   gas: '3000000'
+    // });
     await todo.methods.addStatus('in progress').send({
       from: accounts[2],
       gas: '3000000'
@@ -85,6 +97,10 @@ describe('Todo', () => {
     //   from: accounts[2],
     //   gas: '3000000'
     // });
+    // await todo.methods.addStatus('Draft').send({
+    //   from: accounts[2],
+    //   gas: '3000000'
+    // });
     await todo.methods.createTask('Task', 'Akoh', 0).send({
       from: accounts[3],
       gas: '3000000'
@@ -98,7 +114,7 @@ describe('Todo', () => {
   });
 
   it('can change a task author', async () => {
-    // await todo.methods.addStatus('in progress').send({
+    // await todo.methods.addStatus('Draft').send({
     //   from: accounts[2],
     //   gas: '3000000'
     // });

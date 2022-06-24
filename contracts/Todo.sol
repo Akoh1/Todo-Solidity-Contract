@@ -24,9 +24,9 @@ contract Todo {
 //    mapping (bytes32 => uint) taskStatus;
 //    taskStatus[sha3(Task.title)];
 
-    constructor() {
-        status.push("draft");
-    }
+    // constructor() {
+    //     status.push("draft");
+    // }
 
     function addStatus(string memory value) public {
         status.push(value);
@@ -93,6 +93,7 @@ contract Todo {
 
         for (uint i = index; i<tasks.length-1; i++){
             tasks[i] = tasks[i+1];
+            tasks[i].id = i+1;
         }
         tasks.pop();
     }
