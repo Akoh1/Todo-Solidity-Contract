@@ -94,43 +94,81 @@ describe('Todo', () => {
     assert.equal(1, task.status);
   });
 
-  it('can change a task name', async () => {
-    // await todo.methods.addStatus('in progress').send({
-    //   from: accounts[2],
-    //   gas: '3000000'
-    // });
-    // await todo.methods.addStatus('Draft').send({
-    //   from: accounts[2],
-    //   gas: '3000000'
-    // });
+  it('can change a task detail name', async () => {
+    
     await todo.methods.createTask('Task', 'Akoh').send({
       from: accounts[3],
       gas: '3000000'
     });
-    await todo.methods.changeTaskName(0, 'Task1').send({
+    await todo.methods.changeTaskDetails(0, 'Task1', 'Akoh').send({
       from: accounts[4],
       gas: '3000000'
     });
     const task = await todo.methods.getTask(0).call();
     assert.equal('Task1', task.title);
+    assert.equal('Akoh', task.author);
   });
 
-  it('can change a task author', async () => {
-    // await todo.methods.addStatus('Draft').send({
-    //   from: accounts[2],
-    //   gas: '3000000'
-    // });
+  it('can change a task detail author', async () => {
+    
     await todo.methods.createTask('Task', 'Akoh').send({
       from: accounts[3],
       gas: '3000000'
     });
-    await todo.methods.changeTaskAuthor(0, 'Akoh1').send({
+    await todo.methods.changeTaskDetails(0, 'Task', 'Akoh1').send({
       from: accounts[4],
       gas: '3000000'
     });
     const task = await todo.methods.getTask(0).call();
+    assert.equal('Task', task.title);
     assert.equal('Akoh1', task.author);
   });
+
+  it('can change a task detail', async () => {
+    
+    await todo.methods.createTask('Task', 'Akoh').send({
+      from: accounts[3],
+      gas: '3000000'
+    });
+    await todo.methods.changeTaskDetails(0, 'Task1', 'Akoh1').send({
+      from: accounts[4],
+      gas: '3000000'
+    });
+    const task = await todo.methods.getTask(0).call();
+    assert.equal('Task1', task.title);
+    assert.equal('Akoh1', task.author);
+  });
+
+  // it('can change a task name', async () => {
+    
+  //   await todo.methods.createTask('Task', 'Akoh').send({
+  //     from: accounts[3],
+  //     gas: '3000000'
+  //   });
+  //   await todo.methods.changeTaskName(0, 'Task1').send({
+  //     from: accounts[4],
+  //     gas: '3000000'
+  //   });
+  //   const task = await todo.methods.getTask(0).call();
+  //   assert.equal('Task1', task.title);
+  // });
+
+  // it('can change a task author', async () => {
+  //   // await todo.methods.addStatus('Draft').send({
+  //   //   from: accounts[2],
+  //   //   gas: '3000000'
+  //   // });
+  //   await todo.methods.createTask('Task', 'Akoh').send({
+  //     from: accounts[3],
+  //     gas: '3000000'
+  //   });
+  //   await todo.methods.changeTaskAuthor(0, 'Akoh1').send({
+  //     from: accounts[4],
+  //     gas: '3000000'
+  //   });
+  //   const task = await todo.methods.getTask(0).call();
+  //   assert.equal('Akoh1', task.author);
+  // });
 
   it('can remove a task', async () => {
     // await todo.methods.addStatus('in progress').send({

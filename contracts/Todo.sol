@@ -76,6 +76,11 @@ contract Todo {
         tasks[task_id].status = status_id;
     }
 
+    function changeTaskDetails(uint256 task_id, string memory name, string memory author) public {
+        tasks[task_id].title = name;
+        tasks[task_id].author = author;
+    }
+
     function changeTaskName(uint256 task_id, string memory name) public {
         tasks[task_id].title = name;
     }
